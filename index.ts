@@ -33,22 +33,22 @@ async function getLatestRelease(): Promise<Release | null> {
 ;(async function checkAndDownloadRelease() {
   const latestRelease = await getLatestRelease()
   if (!latestRelease) {
-    console.log(`Could not retrieve latest release information.`)
+    addErrorToLog(`Could not retrieve latest release information`)
     return
   }
-
-  const currentVersion: { name?: string } =
-    fse.readJsonSync(`version.json`, { throws: false }) || {}
+  const file = Bun.file(`version.json`)
+  const currentVersion: { name: string } = (await file.json()) || { name: `` }
   if (currentVersion.name === latestRelease.name) {
     await sendEmailNotification(`No new release yet.`)
     return
   }
-
   latestRelease.assets.forEach(({ name, browser_download_url }) =>
     downloadReleaseAssets(name, browser_download_url)
   )
-  await fse.writeJson(`version.json`, { name: latestRelease.name })
+  await Bun.write(file, `{ "name": "${latestRelease.name}" }`)
   const publishedAt = formatTimestamp(latestRelease.published_at)
+
   const emailText = `Geist v${latestRelease.name} downloaded successfully.\n \n ${latestRelease.body} \n Release notes: ${latestRelease.html_url} published at ${publishedAt}`
+
   await sendEmailNotification(emailText)
 })()
