@@ -1,4 +1,3 @@
-import fse from 'fs-extra'
 import { sendEmailNotification } from './utils/send-mail'
 import { downloadReleaseAssets } from './utils/download-files'
 import { addErrorToLog } from './utils/log'
