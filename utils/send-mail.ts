@@ -19,7 +19,6 @@ export async function sendEmailNotification(text: string) {
     }
 
     await transporter.sendMail(mailOptions)
-    console.log(`Email notification sent successfully.`)
   } catch (err: any) {
     await appendFile(
       `error.txt`,
