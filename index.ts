@@ -2,6 +2,7 @@ import fse from 'fs-extra'
 import { sendEmailNotification } from './utils/send-mail'
 import { downloadReleaseAssets } from './utils/download-files'
 import { addErrorToLog } from './utils/log'
+import { formatTimestamp } from './utils/timestamp'
 
 type Release = {
   name: string
@@ -47,6 +48,7 @@ async function getLatestRelease(): Promise<Release | null> {
     downloadReleaseAssets(name, browser_download_url)
   )
   await fse.writeJson(`version.json`, { name: latestRelease.name })
-  const emailText = `Geist v${latestRelease.name} downloaded successfully.\n \n ${latestRelease.body} \n Release notes: ${latestRelease.html_url} published at ${latestRelease.published_at}`
+  const publishedAt = formatTimestamp(latestRelease.published_at)
+  const emailText = `Geist v${latestRelease.name} downloaded successfully.\n \n ${latestRelease.body} \n Release notes: ${latestRelease.html_url} published at ${publishedAt}`
   await sendEmailNotification(emailText)
 })()
