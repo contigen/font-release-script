@@ -1,11 +1,7 @@
 import fse from 'fs-extra'
 import { sendEmailNotification } from './utils/send-mail'
 import { downloadReleaseAssets } from './utils/download-files'
-
-type Asset = {
-  browser_download_url: string
-  name: string
-}
+import { addErrorToLog } from './utils/log'
 
 type Release = {
   name: string
@@ -28,7 +24,7 @@ async function getLatestRelease(): Promise<Release | null> {
     )
     return await response.json()
   } catch (err: any) {
-    console.error('Error fetching late  st release:', err.message)
+    addErrorToLog(`Error fetching latest release:, ${err.message}`)
     return null
   }
 }
