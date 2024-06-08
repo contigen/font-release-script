@@ -7,7 +7,7 @@ As my package depends on Vercel's [Geist](https://github.com/vercel/geist-font) 
 
 It uses `node-mailer` to send me configured emails 4 times each day (12 AM, 6 AM, 12 PM, and 6 PM) with appropriate information depending whether a new release exists, and accordingly downloads the assets if available.
 
-The script is initialiased by a cron using `node-cron` and runs indefinitely, restarts automatically on system reboot using `pm2`, essentially making it a startup service.
+The script is initialiased by a cron using `node-cron` and runs indefinitely, restarts automatically on system reboot using `pm2`, essentially making it a startup service (on a Linux machine).
 
 Any error and/or info (timestamped) are saved to individual files to keep track of updates.
 
